@@ -1,23 +1,43 @@
 <template>
-  <div id="app">
-    Hello world
-  </div>
+    <div class="container-fluid" >
+        <div class="row">
+
+            <Menu v-on:userChoice="passUserChoice" :list="list"/>
+            <CityMap :selected="selectedPlaces"/>
+
+        </div>
+    </div>
 </template>
 
-<script>
 
-export default {
-  name: 'App',
-}
+<script>
+    import Menu from './components/Menu'
+    import CityMap from './components/CityMap'
+    import json from './assets/places.json'
+    
+
+    export default {
+        name: 'App',
+        components: {
+            Menu,
+            CityMap
+        },
+
+        data() {
+            return {
+                selectedPlaces: {},
+                list: json
+            }
+        },
+
+        methods: {
+            passUserChoice(places) {
+                this.selectedPlaces = places
+            }
+        },
+    }
 </script>
 
+
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
