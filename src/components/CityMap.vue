@@ -1,6 +1,6 @@
 <template>
     <div class="col-md-9">
-        <div id="map" class="map"></div>
+        <div id="cityMap" class="map"></div>
     </div>
 </template>
 
@@ -10,7 +10,7 @@
 
     // voir tuto : https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
     export default {
-        props: ["selected"],
+        props: ["subCategoriesSelected"],
 
         data() {
             return {
@@ -26,7 +26,7 @@
 
         methods: {
             initMap() {
-                this.map = L.map("map").setView([44.4491, 1.454], 14);
+                this.map = L.map("cityMap").setView([44.4491, 1.454], 14);
                 this.tileLayer = L.tileLayer(
                     "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png",
                     {
@@ -41,37 +41,40 @@
         },
 
         watch: {
-            selected: {
+            subCategoriesSelected: {
                 handler() {
-                    if (this.selected.places) {
+
+                    // this.subCategoriesSelected.places = array of "places" property from places.json
+                    let SelectedSubCategoryPlacesList = this.subCategoriesSelected.places;
+                    let infosOfAllPlaces = [];
+
+                    if (SelectedSubCategoryPlacesList) {
+
                         for (let marker of this.markerList) {
                             this.map.removeLayer(marker);
                         }
 
-                        let placesList = this.selected.places;
-                        let infosList = [];
+                        for (let place in SelectedSubCategoryPlacesList) {
+                            let infoPlace = [];
 
-                        for (let index in placesList) {
-                            let infos = [];
-
-                            infos.push(placesList[index].lat);
-                            infos.push(placesList[index].lon);
-                            infos.push(placesList[index].description);
-                            infosList.push(infos);
+                            infoPlace.push(SelectedSubCategoryPlacesList[place].lat);
+                            infoPlace.push(SelectedSubCategoryPlacesList[place].lon);
+                            infoPlace.push(SelectedSubCategoryPlacesList[place].description);
+                            infosOfAllPlaces.push(infoPlace);
                         }
 
-                        for (let index in infosList) {
-                            let longitude = infosList[index][0];
-                            let latitude = infosList[index][1];
+                        for (let infoOfOnePlace in infosOfAllPlaces) {
+                            let longitude = infosOfAllPlaces[infoOfOnePlace][0];
+                            let latitude = infosOfAllPlaces[infoOfOnePlace][1];
                             let customIcon = L.icon({
-                                iconUrl: svgIcons[this.selected.icon],
+                                iconUrl: svgIcons[this.subCategoriesSelected.icon],
                                 iconSize: [30, 30]
                             });
 
                             let marker = L.marker([longitude, latitude], {
                                 icon: customIcon
                             })
-                                .bindPopup(infosList[index][2])
+                                .bindPopup(infosOfAllPlaces[infoOfOnePlace][2])
                                 .addTo(this.map);
 
                             this.markerList.push(marker);

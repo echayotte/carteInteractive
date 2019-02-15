@@ -1,34 +1,37 @@
 <template>
     <div class="col-md-3">
-        <div v-for="item in list" :key="item.id">
-            <b-btn
-                v-b-toggle="item.id"
-                variant="primary"
-                class="btn-block m-1 button text-left"
-            >{{ item.name }}</b-btn>
 
-            <b-collapse :id="item.id">
-                <Subcategorie v-on:userChoice="passUserChoice" :data="item.children"/>
+        <div v-for="category in categories" :key="category.id">
+
+            <b-btn v-b-toggle="category.id" variant="primary" class="btn-block m-1 button text-left" >
+                {{ category.name }}
+            </b-btn>
+
+
+            <b-collapse :id="category.id">
+                <Subcategory v-on:event2="showSelectedSubCategories" :subCategories="category.children"/>
             </b-collapse>
+
         </div>
+
     </div>
 </template>
 
 
 <script>
-    import Subcategorie from "./Subcategorie";
-    // import json from "../assets/places.json"
+    import Subcategory from "./Subcategory";
 
     export default {
-        props: ["list"],
+        props: ["categories"],
 
         components: {
-            Subcategorie
+            Subcategory
         },
 
         methods: {
-            passUserChoice(item) {
-                this.$emit("userChoice", item);
+            showSelectedSubCategories(SelectedChildren) {
+                //pass again the result from Subcategory to IntercativMap file
+                this.$emit("event1", SelectedChildren);
             }
         }
     };

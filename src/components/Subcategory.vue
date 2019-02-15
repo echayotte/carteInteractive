@@ -1,22 +1,20 @@
 <template>
     <div>
-        <div
-            v-for="item in data"
-            :key="item.id"
-            @click="passUserChoice(item)"
-            class="sub m-2"
-        >{{ item.name }}</div>
+        <div v-for="subCategory in subCategories" :key="subCategory.id" @click="showSelectedSubCategories(subCategory)" class="sub m-2">
+            {{ subCategory.name }}
+        </div>
     </div>
 </template>
 
 
 <script>
     export default {
-        props: ["data"],
+        props: ["subCategories"],
 
         methods: {
-            passUserChoice(item) {
-                this.$emit("userChoice", item);
+            showSelectedSubCategories(SelectedChildren) {
+                //pass the result to Menu file
+                this.$emit("event2", SelectedChildren);
             }
         }
     };
