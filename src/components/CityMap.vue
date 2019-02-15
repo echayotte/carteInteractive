@@ -6,18 +6,18 @@
 
 
 <script>
-    import svgIcons from '../assets/icons.json'
+    import svgIcons from "../assets/icons.json";
 
     // voir tuto : https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
     export default {
         props: ["selected"],
 
-        data () {
+        data() {
             return {
                 map: null,
                 tileLayer: null,
-                markerList: [],
-            }
+                markerList: []
+            };
         },
 
         mounted() {
@@ -26,17 +26,18 @@
 
         methods: {
             initMap() {
-                this.map = L.map('map').setView([44.4491, 1.454], 14);
+                this.map = L.map("map").setView([44.4491, 1.454], 14);
                 this.tileLayer = L.tileLayer(
-                    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
+                    "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png",
                     {
                         maxZoom: 18,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+                        attribution:
+                            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
                     }
                 );
 
                 this.tileLayer.addTo(this.map);
-            },
+            }
         },
 
         watch: {
@@ -44,34 +45,36 @@
                 handler() {
                     if (this.selected.places) {
                         for (let marker of this.markerList) {
-                            this.map.removeLayer(marker)
+                            this.map.removeLayer(marker);
                         }
 
-                        let placesList = this.selected.places
+                        let placesList = this.selected.places;
                         let infosList = [];
 
                         for (let index in placesList) {
                             let infos = [];
 
-                            infos.push(placesList[index].lat)
-                            infos.push(placesList[index].lon)
-                            infos.push(placesList[index].description)
-                            infosList.push(infos)
+                            infos.push(placesList[index].lat);
+                            infos.push(placesList[index].lon);
+                            infos.push(placesList[index].description);
+                            infosList.push(infos);
                         }
 
                         for (let index in infosList) {
-                            let longitude = infosList[index][0]
-                            let latitude = infosList[index][1]
-                            let customIcon =    L.icon({
-                                                    iconUrl : svgIcons[this.selected.icon],
-                                                    iconSize: [30, 30],
-                                                })
+                            let longitude = infosList[index][0];
+                            let latitude = infosList[index][1];
+                            let customIcon = L.icon({
+                                iconUrl: svgIcons[this.selected.icon],
+                                iconSize: [30, 30]
+                            });
 
-                            let marker = L.marker([longitude, latitude], {icon: customIcon})
-                                            .bindPopup(infosList[index][2])
-                                            .addTo(this.map)
+                            let marker = L.marker([longitude, latitude], {
+                                icon: customIcon
+                            })
+                                .bindPopup(infosList[index][2])
+                                .addTo(this.map);
 
-                            this.markerList.push(marker)
+                            this.markerList.push(marker);
                         }
                     }
                 }

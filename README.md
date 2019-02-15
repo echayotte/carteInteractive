@@ -1,10 +1,13 @@
-# cartocahors
+# Interactiv Map Project of Cahors, France
 
-> Cahors cartography service
+> Cahors cartography service working with a json file
 
 ## Build Setup
 
 ``` bash
+# go to the **dev** branch
+git checkout dev
+
 # install dependencies
 npm install
 
